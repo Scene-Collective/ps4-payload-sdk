@@ -16,7 +16,7 @@ static inline uint16_t bswap_16(uint16_t val) {
 }
 
 static inline uint32_t bswap_32(uint32_t val) {
-  return ((val & (uint32_t)0x000000ffUL) << 24) | ((val & (uint32_t)0x0000ff00UL) << 8) | ((val & (uint32_t)0x00ff0000UL) >> 8) | ((val & (uint32_t)0xff000000UL) >> 24);
+    return ((val & (uint32_t)0x000000ffUL) << 24) | ((val & (uint32_t)0x0000ff00UL) << 8) | ((val & (uint32_t)0x00ff0000UL) >> 8) | ((val & (uint32_t)0xff000000UL) >> 24);
 }
 
 int isfpkg(char *pkgfn) {
@@ -30,31 +30,27 @@ int isfpkg(char *pkgfn) {
 
   if ((in = fopen(pkgfn, "rb")) == NULL) {
     result = 1;
-    goto exit;
+  } else {
+    fseek(in, 1, SEEK_SET);
+    fread(buffer, 1, 4, in);
+    if (strcmp(buffer, "CNT@") == 0) {
+      result = 0;
+    } else {
+      fseek(in, 0, SEEK_SET);
+      fread(&m_header, 1, 0x180, in);
+    
+      if (m_header.magic != PS4_PKG_MAGIC) {
+        result = 2;
+      } else {
+        if (bswap_32(m_header.type) != 1) {
+          result = 3;
+        }
+      }
+    }
   }
 
-  fseek(in, 1, SEEK_SET);
-  fread(buffer, 1, 4, in);
-  if (strcmp(buffer, "CNT@") == 0) {
-    result = 0;
-    goto exit;
-  }
-
-  fseek(in, 0, SEEK_SET);
-  fread(&m_header, 1, 0x180, in);
-
-  if (m_header.magic != PS4_PKG_MAGIC) {
-    result = 2;
-    goto exit;
-  }
-
-  if (bswap_32(m_header.type) != 1) {
-    result = 3;
-    goto exit;
-  }
-
-exit:
   fclose(in);
+
   return result;
 }
 

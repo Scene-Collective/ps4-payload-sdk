@@ -120,38 +120,40 @@ int file_compare(char *fname1, char *fname2) {
   int file1 = open(fname1, O_RDONLY, 0), file2 = open(fname2, O_RDONLY, 0);
   char *buffer1 = malloc(65536), *buffer2 = malloc(65536);
 
-  if (!file1 || !file2) {
-    goto exit;
-  }
-  lseek(file1, 0, SEEK_END);
-  lseek(file2, 0, SEEK_END);
-  size1 = lseek(file1, 0, SEEK_CUR);
-  size2 = lseek(file2, 0, SEEK_CUR);
-  lseek(file1, 0L, SEEK_SET);
-  lseek(file2, 0L, SEEK_SET);
-  if (size1 != size2) {
-    goto exit;
-  }
-  if (size1 < lastBytes) {
-    lastBytes = size1;
-  }
-  lseek(file1, -lastBytes, SEEK_END);
-  lseek(file2, -lastBytes, SEEK_END);
-  bytesRead1 = read(file1, buffer1, sizeof(char));
-  bytesRead2 = read(file2, buffer2, sizeof(char));
-  if (bytesRead1 > 0 && bytesRead1 == bytesRead2) {
-    for (i = 0; i < bytesRead1; i++) {
-      if (buffer1[i] != buffer2[i]) {
-        goto exit;
+  if (file1 && file2) {
+    lseek(file1, 0, SEEK_END);
+    lseek(file2, 0, SEEK_END);
+    size1 = lseek(file1, 0, SEEK_CUR);
+    size2 = lseek(file2, 0, SEEK_CUR);
+    lseek(file1, 0L, SEEK_SET);
+    lseek(file2, 0L, SEEK_SET);
+    if (size1 == size2) {
+      if (size1 < lastBytes) {
+        lastBytes = size1;
+      }
+      lseek(file1, -lastBytes, SEEK_END);
+      lseek(file2, -lastBytes, SEEK_END);
+      bytesRead1 = read(file1, buffer1, sizeof(char));
+      bytesRead2 = read(file2, buffer2, sizeof(char));
+      if (bytesRead1 > 0 && bytesRead1 == bytesRead2) {
+        res = 1;
+
+        for (i = 0; i < bytesRead1; i++) {
+          if (buffer1[i] != buffer2[i]) {
+            res = 0;
+
+            break;
+          }
+        }
       }
     }
-    res = 1;
   }
-exit:
+
   free(buffer1);
   free(buffer2);
   close(file1);
   close(file2);
+
   return res;
 }
 

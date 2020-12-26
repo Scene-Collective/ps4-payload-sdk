@@ -24,7 +24,7 @@ int32_t getInitialUser();
 void reboot();
 void shutdown();
 
-#define printf_notification(...)                       \
+#define notify(...)                                    \
   do {                                                 \
     char message[256];                                 \
     snprintf(message, sizeof(message), ##__VA_ARGS__); \
