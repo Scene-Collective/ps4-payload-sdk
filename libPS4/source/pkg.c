@@ -16,7 +16,7 @@ static inline uint16_t bswap_16(uint16_t val) {
 }
 
 static inline uint32_t bswap_32(uint32_t val) {
-    return ((val & (uint32_t)0x000000ffUL) << 24) | ((val & (uint32_t)0x0000ff00UL) << 8) | ((val & (uint32_t)0x00ff0000UL) >> 8) | ((val & (uint32_t)0xff000000UL) >> 24);
+  return ((val & (uint32_t)0x000000ffUL) << 24) | ((val & (uint32_t)0x0000ff00UL) << 8) | ((val & (uint32_t)0x00ff0000UL) >> 8) | ((val & (uint32_t)0xff000000UL) >> 24);
 }
 
 int isfpkg(char *pkgfn) {
