@@ -8,7 +8,7 @@
 #include "pfs.h"
 
 int pfs;
-size_t pfs_size, pfs_copied;
+size_t pfs_size = 0, pfs_copied = 0;
 struct pfs_header_t *header;
 struct di_d32 *inodes;
 

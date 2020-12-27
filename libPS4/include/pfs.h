@@ -5,6 +5,8 @@
 
 #include "types.h"
 
+extern size_t pfs_size, pfs_copied;
+
 struct pfs_header_t {
   uint64_t version;
   uint64_t magic;

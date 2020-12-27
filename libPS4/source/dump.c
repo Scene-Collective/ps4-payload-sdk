@@ -177,7 +177,7 @@ void decrypt_dir(char *sourcedir, char *destdir) {
   closedir(dir);
 }
 
-int wait_for_game(char *title_id) {
+int wait_for_app(char *title_id) {
   int res = 0;
 
   DIR *dir;
