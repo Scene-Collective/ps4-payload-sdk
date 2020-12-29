@@ -5,6 +5,7 @@
  * This software may be distributed under the terms of the BSD license.
  * See README for more details.
  */
+
 #pragma once
 
 #ifndef BASE64_H

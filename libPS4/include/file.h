@@ -94,6 +94,7 @@ void touch_file(char *destfile);
 void copy_file(char *sourcefile, char *destfile);
 void copy_dir(char *sourcedir, char *destdir);
 int file_compare(char *fname1, char *fname2);
+int rmtree(const char *path);
 int fgetc_pointer(int fp);
 int mount_large_fs(const char *device, const char *mountpoint, const char *fstype, const char *mode, unsigned int flags);
 void create_iovec(struct iovec **iov, int *iovlen, const char *name, const void *val, size_t len);

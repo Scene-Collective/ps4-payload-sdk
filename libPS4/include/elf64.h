@@ -88,7 +88,7 @@ typedef struct {
 
 typedef struct {
   Elf64_Word sh_name;       /* Section name (index into the
-					   section header string table). */
+                               section header string table). */
   Elf64_Word sh_type;       /* Section type. */
   Elf64_Xword sh_flags;     /* Section flags. */
   Elf64_Addr sh_addr;       /* Address in memory image. */
@@ -157,12 +157,12 @@ typedef struct {
   (((Elf64_Xword)(data) << 8) + (Elf64_Xword)(type))
 
 /*
- *	Note entry header
+ * Note entry header
  */
 typedef Elf_Note Elf64_Nhdr;
 
 /*
- *	Move entry
+ * Move entry
  */
 typedef struct {
   Elf64_Lword m_value;   /* symbol value */
@@ -177,7 +177,7 @@ typedef struct {
 #define ELF64_M_INFO(sym, size) (((sym) << 8) + (unsigned char)(size))
 
 /*
- *	Hardware/Software capabilities entry
+ * Hardware/Software capabilities entry
  */
 typedef struct {
   Elf64_Xword c_tag; /* how to interpret value */

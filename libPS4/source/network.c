@@ -19,7 +19,7 @@ int (*sceNetGetsockname)(int, struct sockaddr *, unsigned int *);
 int (*sceNetGetsockopt)(int s, int level, int optname, void *restrict optval, socklen_t *restrict optlen);
 int (*sceNetSetsockopt)(int s, int level, int optname, const void *optval, socklen_t optlen);
 
-const char (*sceNetInetNtop)(int af, const void *src, char *dst, int size);
+char (*sceNetInetNtop)(int af, const void *src, char *dst, int size);
 int (*sceNetInetPton)(int af, const char *src, void *dst);
 
 uint64_t (*sceNetHtonll)(uint64_t host64);

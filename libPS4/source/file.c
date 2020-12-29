@@ -120,7 +120,7 @@ int file_compare(char *fname1, char *fname2) {
   int file1 = open(fname1, O_RDONLY, 0), file2 = open(fname2, O_RDONLY, 0);
   char *buffer1 = malloc(65536), *buffer2 = malloc(65536);
 
-  if (file1 && file2) {
+  if (file1 && file2 && buffer1 != NULL && buffer2 != NULL) {
     lseek(file1, 0, SEEK_END);
     lseek(file2, 0, SEEK_END);
     size1 = lseek(file1, 0, SEEK_CUR);
@@ -137,11 +137,9 @@ int file_compare(char *fname1, char *fname2) {
       bytesRead2 = read(file2, buffer2, sizeof(char));
       if (bytesRead1 > 0 && bytesRead1 == bytesRead2) {
         res = 1;
-
         for (i = 0; i < bytesRead1; i++) {
           if (buffer1[i] != buffer2[i]) {
             res = 0;
-
             break;
           }
         }
@@ -153,8 +151,54 @@ int file_compare(char *fname1, char *fname2) {
   free(buffer2);
   close(file1);
   close(file2);
-
   return res;
+}
+
+int rmtree(const char *path) {
+  DIR *d = opendir(path);
+  size_t path_len = strlen(path);
+  int r = -1;
+
+  if (d) {
+    struct dirent *p;
+
+    r = 0;
+    while (!r && (p=readdir(d))) {
+      int r2 = -1;
+      char *buf;
+      size_t len;
+
+      /* Skip the names "." and ".." as we don't want to recurse on them. */
+      if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
+        continue;
+      }
+
+      len = path_len + strlen(p->d_name) + 2;
+      buf = malloc(len);
+
+      if (buf) {
+        struct stat statbuf;
+
+        snprintf(buf, len, "%s/%s", path, p->d_name);
+        if (!stat(buf, &statbuf)) {
+          if (S_ISDIR(statbuf.st_mode)) {
+            r2 = rmtree(buf);
+          } else {
+            r2 = unlink(buf);
+          }
+        }
+        free(buf);
+      }
+      r = r2;
+    }
+    closedir(d);
+  }
+
+  if (!r) {
+    r = rmdir(path);
+  }
+
+  return r;
 }
 
 int fgetc_pointer(int fp) {

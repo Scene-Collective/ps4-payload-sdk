@@ -26,6 +26,7 @@ char *(*strchr)(const char *s, int c);
 char *(*strrchr)(const char *s, int c);
 char *(*strstr)(char *str1, char *str2);
 char *(*strdup)(const char *s);
+char *(*strtok)(char *str, const char *sep);
 char *(*index)(const char *s, int c);
 char *(*rindex)(const char *s, int c);
 int (*isdigit)(int c);
@@ -69,6 +70,23 @@ long int (*ftell)(FILE *stream);
 int (*fclose)(FILE *stream);
 int (*fprintf)(FILE *stream, const char *format, ...);
 
+int memset_s(void *s, rsize_t smax, int c, rsize_t n) {
+  bool violation = (s == NULL) || (smax > RSIZE_MAX) || (n > RSIZE_MAX) || (n > smax);
+  if (violation) {
+    if ((s != NULL) && !(smax > RSIZE_MAX)) {
+      for (rsize_t i = 0; i < smax; ++i) {
+        ((volatile unsigned char*)s)[i] = c;
+      }
+    }
+    return 1;
+  } else {
+    for (rsize_t i = 0; i < n; ++i) {
+      ((volatile unsigned char*)s)[i] = c;
+    }
+    return 0;
+  }
+}
+
 void initLibc(void) {
   int libc = sceKernelLoadStartModule("libSceLibcInternal.sprx", 0, NULL, 0, 0, 0);
 
@@ -94,6 +112,7 @@ void initLibc(void) {
   RESOLVE(libc, strrchr);
   RESOLVE(libc, strstr);
   RESOLVE(libc, strdup);
+  RESOLVE(libc, strtok);
   RESOLVE(libc, index);
   RESOLVE(libc, rindex);
   RESOLVE(libc, isdigit);

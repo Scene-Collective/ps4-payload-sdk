@@ -5,6 +5,10 @@
 
 #include <stdint.h>
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
+
 //#define offsetof(a, b) ((size_t)(((void *)&((a *)NULL)->b) - NULL))
 
 #ifndef NULL
@@ -16,6 +20,7 @@
 typedef int bool;
 
 typedef uint64_t size_t;
+typedef uint64_t rsize_t;
 typedef int64_t ssize_t;
 typedef uint16_t wchar_t;
 
@@ -72,7 +77,6 @@ typedef volatile s64 vs64;
 //typedef int *intptr_t;
 
 /* POSIX types */
-typedef uint32_t dev_t;
 typedef uint32_t blksize_t;
 typedef int64_t blkcnt_t;
 typedef uint32_t dev_t;
@@ -85,6 +89,8 @@ typedef int64_t off_t;
 typedef uint32_t uid_t;
 typedef int64_t time_t;
 typedef long suseconds_t;
+
+#define RSIZE_MAX (SIZE_MAX >> 1)
 
 struct timespec {
   time_t tv_sec;

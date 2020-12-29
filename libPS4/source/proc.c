@@ -16,9 +16,12 @@ int findProcess(char* procName) {
     if (sysctl(mib, 3, NULL, &len, NULL, 0) != -1) {
       if (len > 0) {
         void* dump = malloc(len);
+        if (dump == NULL) {
+          return -1;
+        }
         if (sysctl(mib, 3, dump, &len, NULL, 0) != -1) {
           int structSize = *(int*)dump;
-          for (int i = 0; i < (len / structSize); i++) {
+          for (size_t i = 0; i < (len / structSize); i++) {
             struct kinfo_proc* procInfo = (struct kinfo_proc*)(dump + (i * structSize));
             if (!strcmp(procInfo->name, procName)) {
               procPID = procInfo->pid;

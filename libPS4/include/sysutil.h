@@ -17,7 +17,7 @@ typedef struct SceUserServiceLoginUserIdList {
 void initSysUtil(void);
 void systemMessage(char* msg);
 void openBrowser(char* uri);
-int32_t getUserIDList(SceUserServiceLoginUserIdList *userIdList);
+int getUserIDList(SceUserServiceLoginUserIdList *userIdList);
 int32_t getUserID();
 char* getUserName(int32_t userId);
 int32_t getInitialUser();

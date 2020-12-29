@@ -141,7 +141,7 @@ extern int (*sceNetGetsockname)(int, struct sockaddr *, unsigned int *);
 extern int (*sceNetGetsockopt)(int s, int level, int optname, void *restrict optval, socklen_t *restrict optlen);
 extern int (*sceNetSetsockopt)(int s, int level, int optname, const void *optval, socklen_t optlen);
 
-extern const char (*sceNetInetNtop)(int af, const void *src, char *dst, int size);
+extern char (*sceNetInetNtop)(int af, const void *src, char *dst, int size);
 extern int (*sceNetInetPton)(int af, const char *src, void *dst);
 
 extern uint64_t (*sceNetHtonll)(uint64_t host64);

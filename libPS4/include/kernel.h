@@ -6,9 +6,9 @@
 #include "types.h"
 
 typedef struct {
-	uint64_t unk1;
-	char version_string[0x1C];
-	uint32_t version;
+  uint64_t unk1;
+  char version_string[0x1C];
+  uint32_t version;
 } SceFwInfo;
 
 typedef struct timeval SceKernelTimeval;

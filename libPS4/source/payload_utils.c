@@ -2,45 +2,88 @@
 #include "fw_defines.h"
 #include "kernel.h"
 #include "libc.h"
+#include "memory.h"
 
 #include "payload_utils.h"
 
+uint16_t g_firmware;
+
 int is_fw_spoofed() {
-  // TODO
+  SceFwInfo ssv_fw;
+  char ssv_fw_trimmed[5];
+  uint16_t ssv_fw_final;
+
+  uint16_t libc_fw = get_firmware();
+  sceKernelGetSystemSwVersion(&ssv_fw);
+
+  char temp[0x1c];
+  snprintf(temp, 0x1c, "%s", ssv_fw.version_string);
+
+  char *first = strtok(temp, ".");
+  char *second = strtok(NULL, ".");
+
+  sprintf(ssv_fw_trimmed, "%s%c%c", first, second[0], second[1]);
+
+  ssv_fw_final = atoi(ssv_fw_trimmed);
+
+  if (ssv_fw_final != libc_fw) {
+    return 1;
+  }
+
   return 0;
 }
 
 int is_jailbroken() {
-  // TODO
+  if (getuid() == 0) {
+    return 0;
+  }
+  return 1;
+}
+
+int kpayload_kbase(struct thread *td, struct kpayload_kbase_args *args) {
+  UNUSED(td);
+  void *kernel_base;
+
+  int (*copyout)(const void *kaddr, void *uaddr, size_t len) = 0;
+
+  uint16_t fw_version = args->kpayload_kbase_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, copyout_macro))
+      return -1;
+
+  uint64_t uaddr = args->kpayload_kbase_info->uaddr;
+  copyout(&kernel_base, (uint64_t *)uaddr, 8);
+
   return 0;
 }
 
-int is_testkit() {
-  // TODO
-  return 0;
+int kpayload_dump(struct thread *td, struct kpayload_dump_args* args) {
+  UNUSED(td);
+  void *kernel_base;
+
+  int (*copyout)(const void *kaddr, void *uaddr, size_t len) = 0;
+
+  uint16_t fw_version = args->kpayload_dump_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, copyout_macro))
+      return -1;
+
+  uint64_t kaddr = args->kpayload_dump_info->kaddr;
+  uint64_t uaddr = args->kpayload_dump_info->uaddr;
+  size_t size = args->kpayload_dump_info->size;
+
+  int ret = copyout((uint64_t *)kaddr, (uint64_t *)uaddr, size);
+
+  if (ret == -1) {
+    memset((uint64_t *)uaddr, 0, size);
+  }
+
+  return ret;
 }
 
-int is_devkit() {
-  // TODO
-  return 0;
-}
-
-int is_tid_spoofed() {
-  // TODO
-  return 0;
-}
-
-int kpayload_base(struct thread *td, uint16_t fw_version, uint64_t *uaddr) {
-  // TODO
-  return 0;
-}
-
-int kpayload_dump(struct thread *td, uint16_t fw_version, uint64_t kaddr, uint64_t *uaddr, size_t size) {
-  // TODO
-  return 0;
-}
-
-int kpayload_jailbreak(struct thread *td, uint16_t fw_version) {
+int kpayload_jailbreak(struct thread *td, struct kpayload_firmware_args *args) {
   struct filedesc *fd;
   struct ucred *cred;
   fd = td->td_proc->p_fd;
@@ -48,210 +91,22 @@ int kpayload_jailbreak(struct thread *td, uint16_t fw_version) {
 
   void *kernel_base;
   uint8_t *kernel_ptr;
-  void **got_prison0;
-  void **got_rootvnode;
+  void **prison0;
+  void **rootvnode;
 
-  if (fw_version == 350) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K350_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K350_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K350_ROOTVNODE];
-  } else if (fw_version == 355) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K355_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K355_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K355_ROOTVNODE];
-  } else if (fw_version == 370) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K370_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K370_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K370_ROOTVNODE];
-  } else if (fw_version == 400) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K400_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K400_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K400_ROOTVNODE];
-  } else if (fw_version == 401) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K401_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K401_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K401_ROOTVNODE];
-  } else if (fw_version == 405) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K405_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K405_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K405_ROOTVNODE];
-  } else if (fw_version == 406) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K406_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K406_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K406_ROOTVNODE];
-  } else if (fw_version == 407) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K407_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K407_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K407_ROOTVNODE];
-  } else if (fw_version == 450) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K450_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K450_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K450_ROOTVNODE];
-  } else if (fw_version == 455) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K455_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K455_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K455_ROOTVNODE];
-  } else if (fw_version == 470) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K470_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K470_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K470_ROOTVNODE];
-  } else if (fw_version == 471) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K471_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K471_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K471_ROOTVNODE];
-  } else if (fw_version == 472) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K472_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K472_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K472_ROOTVNODE];
-  } else if (fw_version == 473) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K473_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K473_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K473_ROOTVNODE];
-  } else if (fw_version == 474) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K474_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K474_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K474_ROOTVNODE];
-  } else if (fw_version == 500) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K500_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K500_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K500_ROOTVNODE];
-  } else if (fw_version == 501) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K501_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K501_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K501_ROOTVNODE];
-  } else if (fw_version == 503) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K503_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K503_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K503_ROOTVNODE];
-  } else if (fw_version == 505) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K505_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K505_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K505_ROOTVNODE];
-  } else if (fw_version == 507) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K507_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K507_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K507_ROOTVNODE];
-  } else if (fw_version == 550) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K550_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K550_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K550_ROOTVNODE];
-  } else if (fw_version == 553) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K553_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K553_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K553_ROOTVNODE];
-  } else if (fw_version == 555) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K555_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K555_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K555_ROOTVNODE];
-  } else if (fw_version == 556) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K556_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K556_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K556_ROOTVNODE];
-  } else if (fw_version == 600) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K600_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K600_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K600_ROOTVNODE];
-  } else if (fw_version == 602) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K602_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K602_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K602_ROOTVNODE];
-  } else if (fw_version == 620) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K620_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K620_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K620_ROOTVNODE];
-  } else if (fw_version == 650) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K650_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K650_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K650_ROOTVNODE];
-  } else if (fw_version == 651) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K651_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K651_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K651_ROOTVNODE];
-  } else if (fw_version == 670) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K670_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K670_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K670_ROOTVNODE];
-  } else if (fw_version == 671) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K671_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K671_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K671_ROOTVNODE];
-  } else if (fw_version == 672) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K672_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K672_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K672_ROOTVNODE];
-  } else if (fw_version == 700) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K700_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K700_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K700_ROOTVNODE];
-  } else if (fw_version == 701) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K701_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K701_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K701_ROOTVNODE];
-  } else if (fw_version == 702) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K702_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K702_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K702_ROOTVNODE];
-  } else if (fw_version == 750) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K750_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K750_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K750_ROOTVNODE];
-  } else if (fw_version == 751) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K751_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K751_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K751_ROOTVNODE];
-  } else if (fw_version == 755) {
-    kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K755_XFAST_SYSCALL];
-    kernel_ptr = (uint8_t *)kernel_base;
-    got_prison0 = (void **)&kernel_ptr[K755_PRISON_0];
-    got_rootvnode = (void **)&kernel_ptr[K755_ROOTVNODE];
-  } else {
-    return -1;
-  }
+  uint16_t fw_version = args->kpayload_firmware_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, jailbreak_macro))
+      return -1;
 
   cred->cr_uid = 0;
   cred->cr_ruid = 0;
   cred->cr_rgid = 0;
   cred->cr_groups[0] = 0;
 
-  cred->cr_prison = *got_prison0;
-  fd->fd_rdir = fd->fd_jdir = *got_rootvnode;
+  cred->cr_prison = *prison0;
+  fd->fd_rdir = fd->fd_jdir = *rootvnode;
 
   void *td_ucred = *(void **)(((char *)td) + 304);
 
@@ -267,79 +122,230 @@ int kpayload_jailbreak(struct thread *td, uint16_t fw_version) {
   return 0;
 }
 
-int kpayload_mmap(struct thread *td, uint16_t fw_version) {
-  // TODO
+int kpayload_mmap(struct thread *td, struct kpayload_firmware_args *args) {
+  UNUSED(td);
+  void *kernel_base;
+  uint8_t *kernel_ptr;
+
+  uint8_t *kmem;
+
+  uint8_t *mmap_patch_1;
+  uint8_t *mmap_patch_2;
+  uint8_t *mmap_patch_3;
+
+  uint16_t fw_version = args->kpayload_firmware_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, mmap_macro))
+      return -1;
+
+  uint64_t cr0 = readCr0();
+  writeCr0(cr0 & ~X86_CR0_WP);
+
+  kmem = (uint8_t *)mmap_patch_1;
+  kmem[0] = 0xB8;
+  kmem[1] = 0x01;
+  kmem[2] = 0x00;
+  kmem[3] = 0x00;
+  kmem[4] = 0x00;
+  kmem[5] = 0xC3;
+
+  kmem = (uint8_t *)mmap_patch_2;
+  kmem[0] = 0xB8;
+  kmem[1] = 0x01;
+  kmem[2] = 0x00;
+  kmem[3] = 0x00;
+  kmem[4] = 0x00;
+  kmem[5] = 0xC3;
+
+  kmem = (uint8_t *)mmap_patch_3;
+  kmem[0] = 0x31;
+  kmem[1] = 0xC0;
+  kmem[2] = 0x90;
+  kmem[3] = 0x90;
+  kmem[4] = 0x90;
+
+  writeCr0(cr0);
+
   return 0;
 }
 
-int kpayload_kernel_clock(struct thread *td, uint16_t fw_version, uint32_t value) {
-  // TODO
+int kpayload_aslr(struct thread *td, struct kpayload_firmware_args *args) {
+  UNUSED(td);
+  void *kernel_base;
+  uint8_t *kernel_ptr;
+
+  uint8_t *kmem;
+
+  uint8_t *aslr_patch;
+
+  uint16_t fw_version = args->kpayload_firmware_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, aslr_macro))
+      return -1;
+
+  uint64_t cr0 = readCr0();
+  writeCr0(cr0 & ~X86_CR0_WP);
+
+  // This may change depending on new FWs function structure
+  kmem = (uint8_t *)aslr_patch;
+  if (fw_version < 600) {
+    kmem[0] = 0x90;
+    kmem[1] = 0x90;
+  } else {
+    kmem[0] = 0xEB;
+  }
+
+  writeCr0(cr0);
+
   return 0;
 }
 
-int kpayload_activate_browser(struct thread *td, uint16_t fw_version) {
-  // TODO
+int kpayload_kernel_clock(struct thread *td, struct kpayload_kclock_args *args) {
+  UNUSED(td);
+  void *kernel_base;
+
+  void (*sceSblSrtcClearTimeDifference)(uint64_t value) = 0;
+  void (*sceSblSrtcSetTime)(uint64_t tm) = 0;
+
+  uint16_t fw_version = args->kpayload_kclock_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, kclock_macro))
+      return -1;
+
+  uint64_t set_time = args->kpayload_kclock_info->set_time;
+
+  sceSblSrtcSetTime(set_time);
+
+  return 0;
+}
+
+int kpayload_enable_browser(struct thread *td,  struct kpayload_firmware_args *args) {
+  UNUSED(td);
+  void *kernel_base;
+
+  uint64_t (*sceRegMgrSetInt)(uint32_t regId, int value) = 0;
+
+  uint16_t fw_version = args->kpayload_firmware_info->fw_version;
+
+  // NOTE: This is a C preprocessor macros
+  if (!build_kpayload(fw_version, enable_browser_macro))
+      return -1;
+
+  sceRegMgrSetInt(0x3C040000, 0);
+
   return 0;
 }
 
 uint16_t get_firmware() {
+  if (g_firmware) {
+    return g_firmware;
+  }
   uint16_t ret; // Numerical representation of the firmware version. ex: 505 for 5.05, 702 for 7.02, etc
   char binary_fw[2] = { 0 }; // 0x0000
   char string_fw[5] = { 0 }; // "0000\0"
-  char sandbox_path[40]; // `/XXXXXXXXXX/system/common/lib/libc.sprx` [Char count of 39 + nullterm]
+  char sandbox_path[33]; // `/XXXXXXXXXX/common/lib/libc.sprx` [Char count of 32 + nullterm]
 
-  snprintf(sandbox_path, sizeof(sandbox_path), "/%s/system/common/lib/libc.sprx", sceKernelGetFsSandboxRandomWord());
+  snprintf(sandbox_path, sizeof(sandbox_path), "/%s/common/lib/libc.sprx", sceKernelGetFsSandboxRandomWord());
 
-  int fd = sceKernelOpen(sandbox_path, O_RDONLY, 0);
-  if (fd < 0) {
+  FILE *fp = fopen(sandbox_path, "rb");
+  if (!fp) {
     // Assume it's currently jailbroken
-    fd = sceKernelOpen("/system/common/lib/libc.sprx", O_RDONLY, 0);
+    fp = fopen("/system/common/lib/libc.sprx", "rb");
   }
 
-  if (fd >= 0) {
-    sceKernelLseek(fd, 0x374, SEEK_CUR);
-    sceKernelRead(fd, &binary_fw, 2);
-    sceKernelClose(fd);
+  if (fp) {
+    fseek(fp, 0x374, SEEK_CUR);
+    fread(&binary_fw, sizeof(char), 2, fp);
+    fclose(fp);
 
     snprintf(string_fw, sizeof(string_fw), "%02x%02x", binary_fw[1], binary_fw[0]);
   }
   ret = atoi(string_fw);
 
+  g_firmware = ret;
   return ret;
 }
 
-int get_kernel_base() {
-  // uint16_t fw_version = get_firmware();
-  // TODO
+int get_firmware_string(char *fw_string) {
+  uint16_t fw_version = get_firmware();
+
+  sprintf(fw_string, "%i", fw_version);
+
+  if (fw_version < 10) {
+    sprintf(fw_string, "0.0%c", fw_string[0]);
+  } else if (fw_version < 100) {
+    sprintf(fw_string, "0.%c%c", fw_string[0], fw_string[1]);
+  } else if (fw_version < 1000) {
+    sprintf(fw_string, "%c.%c%c", fw_string[0], fw_string[1], fw_string[2]);
+  } else if (fw_version < 10000) {
+    sprintf(fw_string, "%c%c.%c%c", fw_string[0], fw_string[1], fw_string[2], fw_string[3]);
+  } else {
+    return -1;
+  }
+
   return 0;
 }
 
-int get_kernel_chunk() {
-  // uint16_t fw_version = get_firmware();
-  // TODO
+uint64_t get_kernel_base() {
+  uint64_t kernel_base;
+  uint64_t *kernel_base_ptr = mmap(NULL, 8, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0); // Allocate a buffer in userland
+  struct kpayload_kbase_info kpayload_kbase_info;
+  kpayload_kbase_info.fw_version = get_firmware();
+  kpayload_kbase_info.uaddr = (uint64_t)kernel_base_ptr;
+  kexec(&kpayload_kbase, &kpayload_kbase_info);
+  memcpy(&kernel_base, kernel_base_ptr, 8);
+  munmap(kernel_base_ptr, 8);
+  return kernel_base;
+}
+
+int get_memory_dump(uint64_t kaddr, uint64_t *uaddr, size_t size) {
+  struct kpayload_dump_info kpayload_dump_info;
+  kpayload_dump_info.fw_version = get_firmware();
+  kpayload_dump_info.kaddr = kaddr;
+  kpayload_dump_info.uaddr = (uint64_t)uaddr;
+  kpayload_dump_info.size = size;
+  kexec(&kpayload_dump, &kpayload_dump_info);
   return 0;
 }
 
 int jailbreak() {
-  uint16_t fw_version = get_firmware();
-  kexec(&kpayload_jailbreak, &fw_version);
+  if (is_jailbroken()) {
+    return 0;
+  }
+  struct kpayload_firmware_info kpayload_firmware_info;
+  kpayload_firmware_info.fw_version = get_firmware();
+  kexec(&kpayload_jailbreak, &kpayload_firmware_info);
   return 0;
 }
 
 int mmap_patch() {
-  uint16_t fw_version = get_firmware();
-  kexec(&kpayload_mmap, &fw_version);
+  struct kpayload_firmware_info kpayload_firmware_info;
+  kpayload_firmware_info.fw_version = get_firmware();
+  kexec(&kpayload_mmap, &kpayload_firmware_info);
   return 0;
 }
 
-int kernel_clock(uint32_t value) {
-  // uint16_t fw_version = get_firmware();
-  // TODO
+int disable_aslr() {
+  struct kpayload_firmware_info kpayload_firmware_info;
+  kpayload_firmware_info.fw_version = get_firmware();
+  kexec(&kpayload_aslr, &kpayload_firmware_info);
   return 0;
 }
 
-int activate_browser() {
-  uint16_t fw_version = get_firmware();
-  kexec(&kpayload_activate_browser, &fw_version);
+int kernel_clock(uint64_t set_time) {
+  struct kpayload_kclock_info kpayload_kclock_info;
+  kpayload_kclock_info.fw_version = get_firmware();
+  kpayload_kclock_info.set_time = set_time;
+  kexec(&kpayload_kernel_clock, &kpayload_kclock_info);
+  return 0;
+}
+
+int enable_browser() {
+  struct kpayload_firmware_info kpayload_firmware_info;
+  kpayload_firmware_info.fw_version = get_firmware();
+  kexec(&kpayload_enable_browser, &kpayload_firmware_info);
   return 0;
 }

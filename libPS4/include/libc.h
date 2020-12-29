@@ -34,6 +34,7 @@ extern char *(*strchr)(const char *s, int c);
 extern char *(*strrchr)(const char *s, int c);
 extern char *(*strstr)(char *str1, char *str2);
 extern char *(*strdup)(const char *s);
+extern char *(*strtok)(char *str, const char *sep);
 extern char *(*index)(const char *s, int c);
 extern char *(*rindex)(const char *s, int c);
 extern char *(*rindex)(const char *s, int c);
@@ -77,6 +78,8 @@ extern int (*fseek)(FILE *stream, long int offset, int origin);
 extern long int (*ftell)(FILE *stream);
 extern int (*fclose)(FILE *stream);
 extern int (*fprintf)(FILE *stream, const char *format, ...);
+
+int memset_s(void *s, rsize_t smax, int c, rsize_t n);
 
 void initLibc(void);
 

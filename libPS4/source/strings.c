@@ -102,7 +102,7 @@ int substring(char *haystack, char *needle) {
   if (strlen(haystack) >= strlen(needle)) {
     for (int i = strlen(haystack) - strlen(needle); i >= 0; i--) {
       int found = 1;
-      for (int d = 0; d < strlen(needle); d++) {
+      for (size_t d = 0; d < strlen(needle); d++) {
         if (haystack[i + d] != needle[d]) {
           found = 0;
           break;

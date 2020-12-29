@@ -3,6 +3,7 @@
 #ifndef FW_DEFINES_H
 #define FW_DEFINES_H
 
+// Used in every payload that uses jailbreak();
 #define K300_XFAST_SYSCALL         0x0
 #define K310_XFAST_SYSCALL         0x0
 #define K311_XFAST_SYSCALL         0x0
@@ -49,6 +50,7 @@
 #define K801_XFAST_SYSCALL         0x0
 #define K803_XFAST_SYSCALL         0x0
 
+// Used in every payload that uses jailbreak();
 #define K300_PRISON_0              0x0
 #define K310_PRISON_0              0x0
 #define K311_PRISON_0              0x0
@@ -95,6 +97,7 @@
 #define K801_PRISON_0              0x0
 #define K803_PRISON_0              0x0
 
+// Used in every payload that uses jailbreak();
 #define K300_ROOTVNODE             0x0
 #define K310_ROOTVNODE             0x0
 #define K311_ROOTVNODE             0x0
@@ -141,98 +144,7 @@
 #define K801_ROOTVNODE             0x0
 #define K803_ROOTVNODE             0x0
 
-#define K300_PRINTF                0x0
-#define K310_PRINTF                0x0
-#define K311_PRINTF                0x0
-#define K315_PRINTF                0x0029FA50
-#define K350_PRINTF                0x001DF410
-#define K355_PRINTF                0x001DF550
-#define K370_PRINTF                0x001DF620
-#define K400_PRINTF                0x00347450
-#define K401_PRINTF                0x00347450
-#define K405_PRINTF                0x00347580
-#define K406_PRINTF                0x00347590
-#define K407_PRINTF                0x00347590
-#define K450_PRINTF                0x00017F30
-#define K455_PRINTF                0x00017F30
-#define K470_PRINTF                0x00017F30
-#define K471_PRINTF                0x00017F30
-#define K472_PRINTF                0x00017F30
-#define K473_PRINTF                0x00017F30
-#define K474_PRINTF                0x00017F30
-#define K500_PRINTF                0x00435C70
-#define K501_PRINTF                0x00435C70
-#define K503_PRINTF                0x00436000
-#define K505_PRINTF                0x00436040
-#define K507_PRINTF                0x00436040
-#define K550_PRINTF                0x0011AE10
-#define K553_PRINTF                0x0011ADE0
-#define K555_PRINTF                0x0011B150
-#define K556_PRINTF                0x0011B150
-#define K600_PRINTF                0x00307DF0
-#define K602_PRINTF                0x00307DF0
-#define K620_PRINTF                0x00307E10
-#define K650_PRINTF                0x00122ED0
-#define K651_PRINTF                0x00122ED0
-#define K670_PRINTF                0x00123280
-#define K671_PRINTF                0x00123280
-#define K672_PRINTF                0x00123280
-#define K700_PRINTF                0x000BC730
-#define K701_PRINTF                0x000BC730
-#define K702_PRINTF                0x000BC730
-#define K750_PRINTF                0x0
-#define K751_PRINTF                0x0
-#define K755_PRINTF                0x0026F740
-#define K800_PRINTF                0x0
-#define K801_PRINTF                0x0
-#define K803_PRINTF                0x0
-
-#define K300_COPYIN                0x0
-#define K310_COPYIN                0x0
-#define K311_COPYIN                0x0
-#define K315_COPYIN                0x00480C30
-#define K350_COPYIN                0x003B92A0
-#define K355_COPYIN                0x003B96E0
-#define K370_COPYIN                0x003B97D0
-#define K400_COPYIN                0x00286CC0
-#define K401_COPYIN                0x00286CC0
-#define K405_COPYIN                0x00286DF0
-#define K406_COPYIN                0x00286DF0
-#define K407_COPYIN                0x00286DF0
-#define K450_COPYIN                0x0014A890
-#define K455_COPYIN                0x0014A890
-#define K470_COPYIN                0x00149F20
-#define K471_COPYIN                0x00149F20
-#define K472_COPYIN                0x00149F20
-#define K473_COPYIN                0x00149F20
-#define K474_COPYIN                0x00149F20
-#define K500_COPYIN                0x001EA600
-#define K501_COPYIN                0x001EA600
-#define K503_COPYIN                0x001EA710
-#define K505_COPYIN                0x001EA710
-#define K507_COPYIN                0x001EA710
-#define K550_COPYIN                0x00405BB0
-#define K553_COPYIN                0x00405AB0
-#define K555_COPYIN                0x00405E70
-#define K556_COPYIN                0x00405E70
-#define K600_COPYIN                0x001148F0
-#define K602_COPYIN                0x001148F0
-#define K620_COPYIN                0x001148F0
-#define K650_COPYIN                0x003C13F0
-#define K651_COPYIN                0x003C13F0
-#define K670_COPYIN                0x003C17A0
-#define K671_COPYIN                0x003C17A0
-#define K672_COPYIN                0x003C17A0
-#define K700_COPYIN                0x0002F230
-#define K701_COPYIN                0x0002F230
-#define K702_COPYIN                0x0002F230
-#define K750_COPYIN                0x0
-#define K751_COPYIN                0x0
-#define K755_COPYIN                0x0028F9F0
-#define K800_COPYIN                0x0
-#define K801_COPYIN                0x0
-#define K803_COPYIN                0x0
-
+// Used in Kernel Dumper
 #define K300_COPYOUT               0x0
 #define K310_COPYOUT               0x0
 #define K311_COPYOUT               0x0
@@ -279,6 +191,7 @@
 #define K801_COPYOUT               0x0
 #define K803_COPYOUT               0x0
 
+// Used in Dumper, FTP, and Module Dumper
 #define K300_MMAP_SELF_1           0x0
 #define K310_MMAP_SELF_1           0x0
 #define K311_MMAP_SELF_1           0x0
@@ -325,6 +238,7 @@
 #define K801_MMAP_SELF_1           0x0
 #define K803_MMAP_SELF_1           0x0
 
+// Used in Dumper, FTP, and Module Dumper
 #define K300_MMAP_SELF_2           0x0
 #define K310_MMAP_SELF_2           0x0
 #define K311_MMAP_SELF_2           0x0
@@ -371,6 +285,7 @@
 #define K801_MMAP_SELF_2           0x0
 #define K803_MMAP_SELF_2           0x0
 
+// Used in Dumper, FTP, and Module Dumper
 #define K300_MMAP_SELF_3           0x0
 #define K310_MMAP_SELF_3           0x0
 #define K311_MMAP_SELF_3           0x0
@@ -417,6 +332,8 @@
 #define K801_MMAP_SELF_3           0x0
 #define K803_MMAP_SELF_3           0x0
 
+// Used in Disable ASLR
+// May also require changes to the `kpayload_aslr` function in `payload_utils.c`
 #define K300_DISABLE_ASLR          0x0
 #define K310_DISABLE_ASLR          0x0
 #define K311_DISABLE_ASLR          0x0
@@ -463,6 +380,7 @@
 #define K801_DISABLE_ASLR          0x0
 #define K803_DISABLE_ASLR          0x0
 
+// Used in Enable Browser
 #define K300_REG_MGR_SET_INT       0x0
 #define K310_REG_MGR_SET_INT       0x0
 #define K311_REG_MGR_SET_INT       0x0
@@ -509,6 +427,7 @@
 #define K801_REG_MGR_SET_INT       0x0
 #define K803_REG_MGR_SET_INT       0x0
 
+// Used in Kernel Clock
 #define K300_SET_TIME              0x0
 #define K310_SET_TIME              0x0
 #define K311_SET_TIME              0x0
@@ -555,6 +474,7 @@
 #define K801_SET_TIME              0x0
 #define K803_SET_TIME              0x0
 
+// Used in Kernel Clock
 #define K300_CLEAR_TIME_DIFFERENCE 0x00000000 // Needs Verified
 #define K310_CLEAR_TIME_DIFFERENCE 0x00000000 // Needs Verified
 #define K311_CLEAR_TIME_DIFFERENCE 0x00000000 // Needs Verified

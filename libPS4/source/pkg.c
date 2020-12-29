@@ -25,8 +25,8 @@ int isfpkg(char *pkgfn) {
   FILE *in = NULL;
   struct cnt_pkg_main_header m_header;
   struct cnt_pkg_content_header c_header;
-  memset(&m_header, 0, sizeof(struct cnt_pkg_main_header));
-  memset(&c_header, 0, sizeof(struct cnt_pkg_content_header));
+  memset_s(&m_header, sizeof(struct cnt_pkg_main_header), 0, sizeof(struct cnt_pkg_main_header));
+  memset_s(&c_header, sizeof(struct cnt_pkg_main_header), 0, sizeof(struct cnt_pkg_content_header));
 
   if ((in = fopen(pkgfn, "rb")) == NULL) {
     result = 1;
@@ -38,19 +38,16 @@ int isfpkg(char *pkgfn) {
     } else {
       fseek(in, 0, SEEK_SET);
       fread(&m_header, 1, 0x180, in);
-    
+
       if (m_header.magic != PS4_PKG_MAGIC) {
         result = 2;
-      } else {
-        if (bswap_32(m_header.type) != 1) {
-          result = 3;
-        }
+      } else if (bswap_32(m_header.type) != 1) {
+        result = 3;
       }
     }
   }
 
   fclose(in);
-
   return result;
 }
 
@@ -67,13 +64,6 @@ static void _mkdir(const char *dir) {
     }
   }
 }
-
-#define caseentry(id, name) \
-  {                         \
-    case id:                \
-      entry_name = name;    \
-      break;                \
-  }
 
 static char *get_entry_name_by_type(uint32_t type) {
   char *entry_name = malloc(32);
@@ -98,37 +88,99 @@ static char *get_entry_name_by_type(uint32_t type) {
     free(entry_name);
     entry_name = NULL;
     switch (type) {
-      caseentry(0x0400, "license.dat");
-      caseentry(0x0401, "license.info");
-      caseentry(0x0402, "nptitle.dat");
-      caseentry(0x0403, "npbind.dat");
-      caseentry(0x0404, "selfinfo.dat");
-      caseentry(0x0406, "imageinfo.dat");
-      caseentry(0x0407, "target-deltainfo.dat");
-      caseentry(0x0408, "origin-deltainfo.dat");
-      caseentry(0x0409, "psreserved.dat");
-      caseentry(0x1000, "param.sfo");
-      caseentry(0x1001, "playgo-chunk.dat");
-      caseentry(0x1002, "playgo-chunk.sha");
-      caseentry(0x1003, "playgo-manifest.xml");
-      caseentry(0x1004, "pronunciation.xml");
-      caseentry(0x1005, "pronunciation.sig");
-      caseentry(0x1006, "pic1.png");
-      caseentry(0x1007, "pubtoolinfo.dat");
-      caseentry(0x1008, "app/playgo-chunk.dat");
-      caseentry(0x1009, "app/playgo-chunk.sha");
-      caseentry(0x100A, "app/playgo-manifest.xml");
-      caseentry(0x100B, "shareparam.json");
-      caseentry(0x100C, "shareoverlayimage.png");
-      caseentry(0x100D, "save_data.png");
-      caseentry(0x100E, "shareprivacyguardimage.png");
-      caseentry(0x1200, "icon0.png");
-      caseentry(0x1220, "pic0.png");
-      caseentry(0x1240, "snd0.at9");
-      caseentry(0x1260, "changeinfo/changeinfo.xml");
-      caseentry(0x1280, "icon0.dds");
-      caseentry(0x12A0, "pic0.dds");
-      caseentry(0x12C0, "pic1.dds");
+      case 0x0400:
+        entry_name = "license.dat";
+        break;
+      case 0x0401:
+        entry_name = "license.info";
+        break;
+      case 0x0402:
+        entry_name = "nptitle.dat";
+        break;
+      case 0x0403:
+        entry_name = "npbind.dat";
+        break;
+      case 0x0404:
+        entry_name = "selfinfo.dat";
+        break;
+      case 0x0406:
+        entry_name = "imageinfo.dat";
+        break;
+      case 0x0407:
+        entry_name = "target-deltainfo.dat";
+        break;
+      case 0x0408:
+        entry_name = "origin-deltainfo.dat";
+        break;
+      case 0x0409:
+        entry_name = "psreserved.dat";
+        break;
+      case 0x1000:
+        entry_name = "param.sfo";
+        break;
+      case 0x1001:
+        entry_name = "playgo-chunk.dat";
+        break;
+      case 0x1002:
+        entry_name = "playgo-chunk.sha";
+        break;
+      case 0x1003:
+        entry_name = "playgo-manifest.xml";
+        break;
+      case 0x1004:
+        entry_name = "pronunciation.xml";
+        break;
+      case 0x1005:
+        entry_name = "pronunciation.sig";
+        break;
+      case 0x1006:
+        entry_name = "pic1.png";
+        break;
+      case 0x1007:
+        entry_name = "pubtoolinfo.dat";
+        break;
+      case 0x1008:
+        entry_name = "app/playgo-chunk.dat";
+        break;
+      case 0x1009:
+        entry_name = "app/playgo-chunk.sha";
+        break;
+      case 0x100A:
+        entry_name = "app/playgo-manifest.xml";
+        break;
+      case 0x100B:
+        entry_name = "shareparam.json";
+        break;
+      case 0x100C:
+        entry_name = "shareoverlayimage.png";
+        break;
+      case 0x100D:
+        entry_name = "save_data.png";
+        break;
+      case 0x100E:
+        entry_name = "shareprivacyguardimage.png";
+        break;
+      case 0x1200:
+        entry_name = "icon0.png";
+        break;
+      case 0x1220:
+        entry_name = "pic0.png";
+        break;
+      case 0x1240:
+        entry_name = "snd0.at9";
+        break;
+      case 0x1260:
+        entry_name = "changeinfo/changeinfo.xml";
+        break;
+      case 0x1280:
+        entry_name = "icon0.dds";
+        break;
+      case 0x12A0:
+        entry_name = "pic0.dds";
+        break;
+      case 0x12C0:
+        entry_name = "pic1.dds";
+        break;
     }
   }
 
@@ -162,6 +214,10 @@ int unpkg(char *pkgfn, char *tidpath) {
   lseek(fdin, bswap_32(m_header.file_table_offset), SEEK_SET);
 
   struct cnt_pkg_table_entry *entries = malloc(sizeof(struct cnt_pkg_table_entry) * bswap_16(m_header.table_entries_num));
+  if (entries == NULL) {
+    close(fdin);
+    return 3;
+  }
   memset(entries, 0, sizeof(struct cnt_pkg_table_entry) * bswap_16(m_header.table_entries_num));
   int i;
   for (i = 0; i < bswap_16(m_header.table_entries_num); i++) {
@@ -170,6 +226,11 @@ int unpkg(char *pkgfn, char *tidpath) {
 
   // Vars for file name listing.
   struct file_entry *entry_files = malloc(sizeof(struct file_entry) * bswap_16(m_header.table_entries_num));
+  if (entry_files == NULL) {
+    close(fdin);
+    free(entries);
+    return 4;
+  }
   memset(entry_files, 0, sizeof(struct file_entry) * bswap_16(m_header.table_entries_num));
   char *file_name_list[256];
   int file_name_index = 0;
@@ -238,7 +299,7 @@ int unpkg(char *pkgfn, char *tidpath) {
       close(fdin);
       free(entries);
       free(entry_files);
-      return 3;
+      return 5;
     }
   }
 

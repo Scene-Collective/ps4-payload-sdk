@@ -31,7 +31,7 @@ void openBrowser(char *uri) {
   sceSystemServiceLaunchWebBrowser(uri, NULL);
 }
 
-int32_t getUserIDList(SceUserServiceLoginUserIdList *userIdList) {
+int getUserIDList(SceUserServiceLoginUserIdList *userIdList) {
   int libSceUserService = sceKernelLoadStartModule("/system/common/lib/libSceUserService.sprx", 0, NULL, 0, 0, 0);
   RESOLVE(libSceUserService, sceUserServiceInitialize);
   RESOLVE(libSceUserService, sceUserServiceGetLoginUserIdList);
@@ -39,7 +39,7 @@ int32_t getUserIDList(SceUserServiceLoginUserIdList *userIdList) {
   if (sceUserServiceInitialize(NULL) == 0) {
     if (sceUserServiceGetLoginUserIdList(userIdList) == 0) {
       sceUserServiceTerminate();
-      return 1;
+      return 0;
     }
   }
   return -1;
@@ -58,6 +58,9 @@ int32_t getUserID() {
 
 char *getUserName(int32_t userId) {
   char *retval = malloc(SCE_USER_SERVICE_MAX_USER_NAME_LENGTH + 1);
+  if (retval == NULL) {
+    return NULL;
+  }
   int libSceUserService = sceKernelLoadStartModule("/system/common/lib/libSceUserService.sprx", 0, NULL, 0, 0, 0);
   RESOLVE(libSceUserService, sceUserServiceInitialize);
   RESOLVE(libSceUserService, sceUserServiceGetUserName);

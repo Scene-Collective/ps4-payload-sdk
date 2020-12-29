@@ -46,6 +46,10 @@ static void parse_directory(int ino, int lev, char *parent_name, bool dry_run) {
 
     while (pos < top) {
       struct dirent_t *ent = malloc(sizeof(struct dirent_t));
+      if (ent == NULL) {
+        return;
+      }
+
       lseek(pfs, pos, SEEK_SET);
       read(pfs, ent, sizeof(struct dirent_t));
 
@@ -55,6 +59,10 @@ static void parse_directory(int ino, int lev, char *parent_name, bool dry_run) {
       }
 
       char *name = malloc(ent->namelen + 1);
+      if (name == NULL) {
+        free(ent);
+        return;
+      }
       memset(name, 0, ent->namelen + 1);
       if (lev > 0) {
         lseek(pfs, pos + sizeof(struct dirent_t), SEEK_SET);
@@ -64,9 +72,19 @@ static void parse_directory(int ino, int lev, char *parent_name, bool dry_run) {
       char *fname;
       if (parent_name != NULL) {
         fname = malloc(strlen(parent_name) + ent->namelen + 2);
+        if (fname == NULL) {
+          free(ent);
+          free(name);
+          return;
+        }
         sprintf(fname, "%s/%s", parent_name, name);
       } else {
         fname = malloc(ent->namelen + 2);
+        if (fname == NULL) {
+          free(ent);
+          free(name);
+          return;
+        }
         sprintf(fname, "%s", name);
       }
 
@@ -91,20 +109,39 @@ static void parse_directory(int ino, int lev, char *parent_name, bool dry_run) {
 }
 
 int unpfs(char *pfsfn, char *tidpath) {
+  if (tidpath == NULL) {
+    return -1;
+  }
+
   copy_buffer = malloc(BUFFER_SIZE);
+  if (copy_buffer == NULL) {
+    return -1;
+  }
 
   mkdir(tidpath, 0777);
 
   pfs = open(pfsfn, O_RDONLY, 0);
   if (pfs < 0) {
+    free(copy_buffer);
     return -1;
   }
 
   header = malloc(sizeof(struct pfs_header_t));
+  if (header == NULL) {
+    free(copy_buffer);
+    close(pfs);
+    return -1;
+  }
   lseek(pfs, 0, SEEK_SET);
   read(pfs, header, sizeof(struct pfs_header_t));
 
   inodes = malloc(sizeof(struct di_d32) * header->ndinode);
+  if (inodes == NULL) {
+    free(copy_buffer);
+    close(pfs);
+    free(header);
+    return -1;
+  }
 
   uint32_t ix = 0;
 
@@ -122,10 +159,10 @@ int unpfs(char *pfsfn, char *tidpath) {
   parse_directory(header->superroot_ino, 0, tidpath, 1);
   parse_directory(header->superroot_ino, 0, tidpath, 0);
 
-  free(header);
-  free(inodes);
-  close(pfs);
   free(copy_buffer);
+  free(header);
+  close(pfs);
+  free(inodes);
 
   return 0;
 }

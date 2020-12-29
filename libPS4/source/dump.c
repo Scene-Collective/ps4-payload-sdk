@@ -30,8 +30,9 @@ int is_self(const char *fn) {
           uint16_t snum = *(uint16_t *)((uint8_t *)addr + 0x18);
           if (st.st_size >= (0x20 + snum * 0x20 + 4)) {
             uint32_t elfMagic = *(uint32_t *)((uint8_t *)addr + 0x20 + snum * 0x20);
-            if ((selfMagic == SELF_MAGIC) && (elfMagic == ELF_MAGIC))
+            if (elfMagic == ELF_MAGIC) {
               res = 1;
+            }
           }
         }
       }
@@ -39,7 +40,6 @@ int is_self(const char *fn) {
     }
     close(fd);
   }
-
   return res;
 }
 
@@ -52,12 +52,11 @@ bool read_decrypt_segment(int fd, uint64_t index, uint64_t offset, size_t size, 
   while (outSize > 0) {
     size_t bytes = (outSize > DECRYPT_SIZE) ? DECRYPT_SIZE : outSize;
     uint8_t *addr = (uint8_t *)mmap(0, bytes, PROT_READ, MAP_PRIVATE | 0x80000, fd, realOffset);
-    if (addr != MAP_FAILED) {
-      memcpy(outPtr, addr, bytes);
-      munmap(addr, bytes);
-    } else {
+    if (addr == MAP_FAILED) {
       return 0;
     }
+    memcpy(outPtr, addr, bytes);
+    munmap(addr, bytes);
     outPtr += bytes;
     outSize -= bytes;
     realOffset += bytes;
@@ -81,6 +80,9 @@ int is_segment_in_other_segment(Elf64_Phdr *phdr, int index, Elf64_Phdr *phdrs, 
 
 SegmentBufInfo *parse_phdr(Elf64_Phdr *phdrs, int num, int *segBufNum) {
   SegmentBufInfo *infos = (SegmentBufInfo *)malloc(sizeof(SegmentBufInfo) * num);
+  if (infos == NULL) {
+    return NULL; // Is this what should be returned when unable to allocate `infos`?
+  }
   int segindex = 0;
   for (int i = 0; i < num; i += 1) {
     Elf64_Phdr *phdr = &phdrs[i];
@@ -107,19 +109,21 @@ void do_dump(char *saveFile, int fd, SegmentBufInfo *segBufs, int segBufNum, Elf
     write(sf, ehdr, elfsz);
     for (int i = 0; i < segBufNum; i += 1) {
       uint8_t *buf = (uint8_t *)malloc(segBufs[i].bufsz);
-      memset(buf, 0, segBufs[i].bufsz);
-      if (segBufs[i].enc) {
-        if (read_decrypt_segment(fd, segBufs[i].index, 0, segBufs[i].filesz, buf)) {
+      if (buf != NULL) {
+        memset(buf, 0, segBufs[i].bufsz);
+        if (segBufs[i].enc) {
+          if (read_decrypt_segment(fd, segBufs[i].index, 0, segBufs[i].filesz, buf)) {
+            lseek(sf, segBufs[i].fileoff, SEEK_SET);
+            write(sf, buf, segBufs[i].bufsz);
+          }
+        } else {
+          lseek(fd, -segBufs[i].filesz, SEEK_END);
+          read(fd, buf, segBufs[i].filesz);
           lseek(sf, segBufs[i].fileoff, SEEK_SET);
-          write(sf, buf, segBufs[i].bufsz);
+          write(sf, buf, segBufs[i].filesz);
         }
-      } else {
-        lseek(fd, -segBufs[i].filesz, SEEK_END);
-        read(fd, buf, segBufs[i].filesz);
-        lseek(sf, segBufs[i].fileoff, SEEK_SET);
-        write(sf, buf, segBufs[i].filesz);
+        free(buf);
       }
-      free(buf);
     }
     close(sf);
   }
@@ -220,12 +224,16 @@ int wait_for_bdcopy(char *title_id) {
   fseek(pbm, 0, SEEK_SET);
 
   buf = malloc(filelen);
+  if (buf == NULL) {
+    fclose(pbm);
+    return 0; // Return 0 on when unable to allocate buffer, should this be 100?
+  }
 
   fread(buf, sizeof(char), filelen, pbm);
   fclose(pbm);
 
   progress = 0;
-  for (int i = 0x100; i < filelen; i++) {
+  for (size_t i = 0x100; i < filelen; i++) {
     if (buf[i]) {
       progress++;
     }
@@ -237,9 +245,9 @@ int wait_for_bdcopy(char *title_id) {
 }
 
 int wait_for_usb(char *usb_name, char *usb_path) {
-  int fd = open("/mnt/usb0/.dirtest", O_WRONLY | O_CREAT | O_TRUNC, 0777);
-  if (fd != -1) {
-    close(fd);
+  FILE *fp = fopen("/mnt/usb0/.dirtest", "w");
+  if (fp) {
+    fclose(fp);
     unlink("/mnt/usb0/.dirtest");
     sprintf(usb_name, "%s", "USB0");
     sprintf(usb_path, "%s", "/mnt/usb0");
