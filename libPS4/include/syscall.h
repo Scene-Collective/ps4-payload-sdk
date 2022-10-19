@@ -6,11 +6,7 @@
 #include "types.h"
 
 #define SYSCALL(name, number)        \
-  __asm__(".intel_syntax noprefix"); \
-  __asm__(".globl " #name "");       \
-  __asm__("" #name ":");             \
-  __asm__("movq rax, " #number "");  \
-  __asm__("jmp syscall_macro");
+  __asm__ (".intel_syntax noprefix\n\n" ".globl " #name "\n" #name ":\n" "mov rax, " #number "\n" "jmp syscall_macro\n")
 
 unsigned long syscall(unsigned long n, ...);
 
