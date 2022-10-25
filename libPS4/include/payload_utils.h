@@ -112,7 +112,7 @@ static inline __attribute__((always_inline)) uint64_t __readmsr(unsigned long __
 static inline __attribute__((always_inline)) uint64_t readCr0(void) {
   uint64_t cr0;
   __asm__ volatile(".intel_syntax noprefix\n\n"
-                   "mov cr0, %0"
+                   "mov %0, cr0"
                    : "=r"(cr0)
                    :
                    : "memory");
@@ -121,7 +121,7 @@ static inline __attribute__((always_inline)) uint64_t readCr0(void) {
 
 static inline __attribute__((always_inline)) void writeCr0(uint64_t cr0) {
   __asm__ volatile(".intel_syntax noprefix\n\n"
-                   "mov %0, cr0"
+                   "mov cr0, %0"
                    :
                    : "r"(cr0)
                    : "memory");
