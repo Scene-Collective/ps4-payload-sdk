@@ -18,6 +18,6 @@ extern int DEBUG_SOCK;
     if (DEBUG_SOCK >= 0) {                                                      \
       SckSend(DEBUG_SOCK, debug_message, size);                                 \
     }                                                                           \
-  } while (0);
+  } while (0)
 
 #endif
