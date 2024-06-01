@@ -375,7 +375,7 @@
 #define K1070_MMAP_SELF_2          0x001F4500
 #define K1071_MMAP_SELF_2          0x001F4500
 #define K1100_MMAP_SELF_2          0x003D0E70
-#define K1102_MMAP_SELF_2          0x003D0E70
+#define K1102_MMAP_SELF_2          0x003D0E90
 
 // Used in Module Dumper, App Dumper, and FTP
 #define K300_MMAP_SELF_3           0x0
