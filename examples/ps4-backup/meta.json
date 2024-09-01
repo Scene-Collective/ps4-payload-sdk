@@ -1,0 +1,16 @@
+{
+  "title": "Backup",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Backs up your PS4's databases, licenses, and user data. Note this may not be useful if you have to reinitalize as your keys may change.",
+    "en": "Backs up your PS4's databases, licenses, and user data. Note this may not be useful if you have to reinitalize as your keys may change."
+  },
+  "author": "Stooged",
+  "url": "https://github.com/Scene-Collective/ps4-backup",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Enable Updates",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Enables updates by deleting the dummy directories created by 'Disable Updates'.",
+    "en": "Enables updates by deleting the dummy directories created by 'Disable Updates'."
+  },
+  "author": "",
+  "url": "https://github.com/Scene-Collective/ps4-enable-updates",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

@@ -1,0 +1,16 @@
+{
+  "title": "History Blocker",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Blocks the browser from remembering and returning to the last opened page on start. Run again to enable/disable.",
+    "en": "Blocks the browser from remembering and returning to the last opened page on start. Run again to enable/disable."
+  },
+  "author": "Stooged",
+  "url": "https://github.com/Scene-Collective/ps4-history-blocker",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}
