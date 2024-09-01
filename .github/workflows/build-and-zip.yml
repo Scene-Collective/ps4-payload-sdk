@@ -1,0 +1,69 @@
+name: Build and Zip
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@main
+
+    - name: Set up build environment
+      run: sudo apt-get update && sudo apt-get install -y build-essential
+
+    - name: Build SDK (libPS4)
+      run: make -C libPS4
+
+    - name: Build and Rename Outputs
+      id: build_outputs
+      run: |
+        declare -a examples=(
+          "ps4-app-dumper"
+          "ps4-app2usb"
+          "ps4-backup"
+          "ps4-disable-aslr"
+          "ps4-disable-updates"
+          "ps4-enable-browser"
+          "ps4-enable-updates"
+          "ps4-exit-idu"
+          "ps4-fan-threshold"
+          "ps4-ftp"
+          "ps4-history-blocker"
+          "ps4-kernel-clock"
+          "ps4-kernel-dumper"
+          "ps4-restore"
+          "ps4-rif-renamer"
+        )
+
+        for example in "${examples[@]}"; do
+          echo "Building $example..."
+          make -C "examples/$example"
+        done
+        
+        # Save examples array as output
+        echo "examples=${examples[@]}" >> $GITHUB_ENV
+
+    - name: Create ZIP file
+      run: |
+        mkdir -p PS4-Payloads
+        # Access examples from environment variable
+        examples=(${{ env.examples }})
+        for example in "${examples[@]}"; do
+          cp "examples/$example/$example.bin" PS4-Payloads/
+        done
+               
+        # Create the zip file excluding itself if present
+        zip PS4-Payloads.zip PS4-Payloads/*.bin
+
+    - name: Release for branch master
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release create PS4-Payloads-1.0${{ github.run_number }} PS4-Payloads.zip --target ${{ github.sha }} -t PS4-Payloads-1.0${{ github.run_number }}
