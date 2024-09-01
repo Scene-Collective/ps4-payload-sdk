@@ -39,6 +39,9 @@ jobs:
           "ps4-kernel-dumper"
           "ps4-restore"
           "ps4-rif-renamer"
+          "ps4-todex"
+          "ps4-pup-decrypt"
+          "ps4-permanent-uart"
         )
 
         for example in "${examples[@]}"; do
