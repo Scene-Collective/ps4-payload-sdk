@@ -42,6 +42,7 @@ jobs:
           "ps4-todex"
           "ps4-pup-decrypt"
           "ps4-permanent-uart"
+          "ps4-module-dumper"
         )
 
         for example in "${examples[@]}"; do
