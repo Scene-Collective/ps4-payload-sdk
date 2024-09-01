@@ -1,0 +1,16 @@
+{
+  "title": "Permanent UART",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Enabled hardware based UART without a kernel patch, persists though updates.",
+    "en": "Enabled hardware based UART without a kernel patch, persists though updates."
+  },
+  "author": "",
+  "url": "https://github.com/Scene-Collective/ps4-permanent-uart",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}
