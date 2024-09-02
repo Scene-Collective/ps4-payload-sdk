@@ -1,0 +1,16 @@
+{
+  "title": "RIF Renamer",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Renames 'fake' RIFs to 'free' RIFs for better HEN compatibility. Use this if your PKGs only work with Mira+HEN.",
+    "en": "Renames 'fake' RIFs to 'free' RIFs for better HEN compatibility. Use this if your PKGs only work with Mira+HEN."
+  },
+  "author": "Al Azif",
+  "url": "https://github.com/Scene-Collective/ps4-rif-renamer",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

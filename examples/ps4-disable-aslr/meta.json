@@ -1,0 +1,16 @@
+{
+  "title": "Disable ASLR",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Disables the ASLR (Address space layout randomization) to make working with memory easier/repeatable.",
+    "en": "Disables the ASLR (Address space layout randomization) to make working with memory easier/repeatable."
+  },
+  "author": "",
+  "url": "https://github.com/Scene-Collective/ps4-disable-aslr",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

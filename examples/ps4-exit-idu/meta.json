@@ -1,0 +1,16 @@
+{
+  "title": "Exit IDU",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Exits IDU mode and restarts the console.",
+    "en": "Exits IDU mode and restarts the console."
+  },
+  "author": "",
+  "url": "https://github.com/Scene-Collective/ps4-exit-idu",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Kernel Clock",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Changes the internal clock of the PS4, can be used to reactive licenses/features.",
+    "en": "Changes the internal clock of the PS4, can be used to reactive licenses/features."
+  },
+  "author": "",
+  "url": "https://github.com/Scene-Collective/ps4-kernel-clock/",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

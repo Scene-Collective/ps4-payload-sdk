@@ -1,0 +1,16 @@
+{
+  "title": "App Dumper",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Dumps and decrypts applications to a USB device. Can be configured with `dumper.cfg` on the root of the USB device.",
+    "en": "Dumps and decrypts applications to a USB device. Can be configured with `dumper.cfg` on the root of the USB device."
+  },
+  "author": "xvortex",
+  "url": "https://github.com/Scene-Collective/ps4-app-dumper",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

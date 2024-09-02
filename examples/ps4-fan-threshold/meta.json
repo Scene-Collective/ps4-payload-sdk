@@ -1,0 +1,16 @@
+{
+  "title": "Fan Threshold",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Sets the temperature threshold where the fan will kick into turbo.",
+    "en": "Sets the temperature threshold where the fan will kick into turbo."
+  },
+  "author": "",
+  "url": "https://github.com/Scene-Collective/ps4-fan-threshold",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}
