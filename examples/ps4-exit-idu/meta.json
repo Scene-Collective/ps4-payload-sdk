@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Exits IDU mode and restarts the console.",
-    "en": "Exits IDU mode and restarts the console."
+    "en": "Exits IDU mode and restarts the console.",
+    "es": "Sale del modo IDU y reinicia la consola."
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-exit-idu",

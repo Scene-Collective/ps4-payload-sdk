@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Enables updates by deleting the dummy directories created by 'Disable Updates'.",
-    "en": "Enables updates by deleting the dummy directories created by 'Disable Updates'."
+    "en": "Enables updates by deleting the dummy directories created by 'Disable Updates'.",
+    "es": "Activa las actualizaciones de firmware al borrar los directorios vacíos creados por el payload 'Disable Updates'"
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-enable-updates",

@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Blocks the browser from remembering and returning to the last opened page on start. Run again to enable/disable.",
-    "en": "Blocks the browser from remembering and returning to the last opened page on start. Run again to enable/disable."
+    "en": "Blocks the browser from remembering and returning to the last opened page on start. Run again to enable/disable.",
+    "es": "Bloquea el navegador para no recordar ni regresar a la última página abierta al iniciar el navegador. Ejecuta este payload de nuevo para activar/desactivar."
   },
   "author": "Stooged",
   "url": "https://github.com/Scene-Collective/ps4-history-blocker",

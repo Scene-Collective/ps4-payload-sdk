@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Renames 'fake' RIFs to 'free' RIFs for better HEN compatibility. Use this if your PKGs only work with Mira+HEN.",
-    "en": "Renames 'fake' RIFs to 'free' RIFs for better HEN compatibility. Use this if your PKGs only work with Mira+HEN."
+    "en": "Renames 'fake' RIFs to 'free' RIFs for better HEN compatibility. Use this if your PKGs only work with Mira+HEN.",
+    "es": "Renombra RIFs 'falsos' a RIFs 'libres' para mejorar la compatibilidad con HEN. Usa este payload si tus PKGs solo funcionan con Mira+HEN."
   },
   "author": "Al Azif",
   "url": "https://github.com/Scene-Collective/ps4-rif-renamer",

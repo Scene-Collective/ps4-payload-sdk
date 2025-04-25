@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Restores the data saved in the 'Backup' payload.",
-    "en": "Restores the data saved in the 'Backup' payload."
+    "en": "Restores the data saved in the 'Backup' payload.",
+    "es": "Restaurar el respaldo creado por el payload 'Backup'."
   },
   "author": "Stooged",
   "url": "https://github.com/Scene-Collective/ps4-restore",

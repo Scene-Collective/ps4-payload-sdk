@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Sets the temperature threshold where the fan will kick into turbo.",
-    "en": "Sets the temperature threshold where the fan will kick into turbo."
+    "en": "Sets the temperature threshold where the fan will kick into turbo.",
+    "es": "Ajusta a partir de qué temperatura el ventilador entrará en modo turbo."
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-fan-threshold",

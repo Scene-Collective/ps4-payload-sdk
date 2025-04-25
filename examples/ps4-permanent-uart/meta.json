@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Enabled hardware based UART without a kernel patch, persists though updates.",
-    "en": "Enabled hardware based UART without a kernel patch, persists though updates."
+    "en": "Enabled hardware based UART without a kernel patch, persists though updates.",
+    "es": "Activar UART sin necesidad de parchar el kernel, es persistente a pesar de actualizaciones."
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-permanent-uart",

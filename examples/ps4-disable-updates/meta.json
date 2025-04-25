@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Disables firmware updates by creating dummy directories where updates are be downloaded.",
-    "en": "Disables firmware updates by creating dummy directories where updates are be downloaded."
+    "en": "Disables firmware updates by creating dummy directories where updates are be downloaded.",
+    "es": "Desactiva las actualizaciones de firmware. Crea directorios vacíos en las rutas donde habrían de ser descargados los archivos de actualización, haciendo que esas rutas se vuelvan inutilizables."
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-disable-updates",

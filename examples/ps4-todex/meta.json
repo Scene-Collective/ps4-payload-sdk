@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Spoofs the target ID to match that of a testkit, enables some extra options, etc.",
-    "en": "Spoofs the target ID to match that of a testkit, enables some extra options, etc."
+    "en": "Spoofs the target ID to match that of a testkit, enables some extra options, etc.",
+    "es": "Burla el ID de la consola para coincidar con el ID de un kit de prueba (testkit), activa algunas otras opciones extra, etc."
   },
   "author": "zecoxao",
   "url": "https://github.com/Scene-Collective/ps4-todex",

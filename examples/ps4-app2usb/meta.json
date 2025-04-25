@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Unofficial external drive support for applications. Reads `app2usb.ini` from the external drive for options.",
-    "en": "Unofficial external drive support for applications. Reads `app2usb.ini` from the external drive for options."
+    "en": "Unofficial external drive support for applications. Reads `app2usb.ini` from the external drive for options.",
+    "es": "Mueve aplicaciones desde el disco duro interno hacia un dispositivo externo, incluso aquellas sin soporte oficial para instalarse en un dispositivo externo. Si el archivo `app2usb.ini` se encuentra en el dispositivo externo, es posible configurar opciones (por ejemplo, ignorar aplicaciones específicas)."
   },
   "author": "Stooged",
   "url": "https://github.com/Scene-Collective/ps4-app2usb",
