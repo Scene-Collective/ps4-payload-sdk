@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Changes the internal clock of the PS4, can be used to reactive licenses/features.",
-    "en": "Changes the internal clock of the PS4, can be used to reactive licenses/features."
+    "en": "Changes the internal clock of the PS4, can be used to reactive licenses/features.",
+    "es": "Cambia el reloj interno de la PS4, puede ser usado para reactivar licencias/características."
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-kernel-clock/",

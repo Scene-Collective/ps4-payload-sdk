@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Backs up your PS4's databases, licenses, and user data. Note this may not be useful if you have to reinitalize as your keys may change.",
-    "en": "Backs up your PS4's databases, licenses, and user data. Note this may not be useful if you have to reinitalize as your keys may change."
+    "en": "Backs up your PS4's databases, licenses, and user data. Note this may not be useful if you have to reinitalize as your keys may change.",
+    "es": "Respalda las bases de datos, licencias y otros datos de usuario de la PS4. Toma en cuenta que sí necesitas reinicializar el sistema, este respaldo podría se inútil, pues las llaves usadas para firmar este respaldo podrían cambiar al reinicializar la PS4."
   },
   "author": "Stooged",
   "url": "https://github.com/Scene-Collective/ps4-backup",

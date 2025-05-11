@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Dumps your device's kernel from memory to a USB device",
-    "en": "Dumps your device's kernel from memory to a USB device"
+    "en": "Dumps your device's kernel from memory to a USB device",
+    "es": "Hacer un volcado del kernel en memoria hacia un dispositivo USB"
   },
   "author": "Eversion",
   "url": "https://github.com/Scene-Collective/ps4-kernel-dumper",

@@ -6,7 +6,8 @@
   "firmware": "",
   "description": {
     "default": "Permenently activates the browser without needing to sign into PSN.",
-    "en": "Permenently activates the browser without needing to sign into PSN."
+    "en": "Permenently activates the browser without needing to sign into PSN.",
+    "es": "Activa permanentemente el navegador, sin necesidad de iniciar sesión en PSN."
   },
   "author": "",
   "url": "https://github.com/Scene-Collective/ps4-enable-browser",
