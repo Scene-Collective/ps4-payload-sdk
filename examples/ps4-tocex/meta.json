@@ -1,0 +1,16 @@
+{
+  "title": "ToCex",
+  "version": "1.0.0",
+  "updated": "2021-01-01T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Spoofs the target ID to match that of a retail.",
+    "en": "Spoofs the target ID to match that of a retail."
+  },
+  "author": "zecoxao",
+  "url": "https://github.com/Scene-Collective/ps4-todex",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}
