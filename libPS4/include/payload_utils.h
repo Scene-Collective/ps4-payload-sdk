@@ -237,8 +237,11 @@ static inline __attribute__((always_inline)) void writeCr0(uint64_t cr0) {
     caseentry(1071, macro);               \
     caseentry(1100, macro);               \
     caseentry(1102, macro);               \
+    caseentry(1150, macro);               \
+    caseentry(1200, macro);               \
+    caseentry(1202, macro);               \
   default:                                \
-    printf_debug("Unsupported firmware"); \
+    printf_debug("%s (%s:%d) Unsupported firmware\n", __FILE__, __FUNCTION__, __LINE__); \
     return -1;                            \
   }
 
