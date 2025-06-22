@@ -1,0 +1,16 @@
+{
+  "title": "AppCache-Install",
+  "version": "1.0.0",
+  "updated": "2025-02-06T00:00:00Z",
+  "device": "PlayStation 4",
+  "firmware": "",
+  "description": {
+    "default": "Allow to replace the ApplicationCache.db with a custom one.",
+    "en": "Allow to replace the ApplicationCache.db with a custom one."
+  },
+  "author": "stooged",
+  "url": "https://github.com/stooged/Cache-Install",
+  "redirect": false,
+  "reload": false,
+  "offline": true
+}

@@ -1,12 +1,48 @@
 #!/bin/bash
 
-# Install prerequisites if root
+# Function to install prerequisites for Debian-based systems (including Ubuntu)
+install_debian() {
+  apt-get update
+  apt-get -y install binutils gcc make
+}
+
+# Function to install prerequisites for Fedora
+install_fedora() {
+  dnf install -y binutils binutils-gold gcc make
+}
+
+# Function to install prerequisites for Arch
+install_arch() {
+  pacman -Sy --noconfirm binutils gcc make
+}
+
+# Detect the distribution
 if [ "$EUID" -ne 0 ]; then
   echo "Not root, skipping update and install"
   exit
+fi
+
+# Check for various distributions
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  case "$ID" in
+    ubuntu|debian)
+      install_debian
+      ;;
+    fedora)
+      install_fedora
+      ;;
+    arch)
+      install_arch
+      ;;
+    *)
+      echo "Unsupported distribution: $ID"
+      exit 1
+      ;;
+  esac
 else
-  apt-get update
-  apt-get -y install binutils gcc make
+  echo "Unsupported distribution"
+  exit 1
 fi
 
 # Delete directory if it exists and make empty directory
