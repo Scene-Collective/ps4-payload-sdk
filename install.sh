@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # DEPRECIATED: Left for example on how you *could* install it
 
