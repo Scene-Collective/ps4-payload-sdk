@@ -8,7 +8,7 @@ if [ "$EUID" -ne 0 ]; then
   exit
 else
   apt-get update
-  apt-get install -y --no-install-recommends binutils gcc make
+  apt-get install -y --no-install-recommends build-essential binutils gcc make
 fi
 
 # Delete directory if it exists and make empty directory
