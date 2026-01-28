@@ -186,7 +186,7 @@ int kpayload_aslr(struct thread *td, struct kpayload_firmware_args *args) {
   kmem = (uint8_t *)aslr_patch;
   kmem[0] = 0xEB;
   if (fw_version < 600 || fw_version > 755) {
-    // 3.50-5.56 and 8.00-13.02
+    // 3.50-5.56 and 8.00-13.04
     kmem[1] = 0x00;
   }
 
@@ -324,7 +324,7 @@ int kpayload_npdrm_patch(struct thread *td, struct kpayload_firmware_args *args)
     // 3.50-4.74
     kmem[1] = 0x04;
   } else {
-    // 5.00-13.02
+    // 5.00-13.04
     kmem[1] = 0x00;
   }
 
