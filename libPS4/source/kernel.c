@@ -23,6 +23,12 @@ int (*sceKernelRead)(int fd, void *buf, size_t nbyte);
 int (*sceKernelLseek)(int fd, off_t offset, int whence);
 int (*sceKernelClose)(int fd);
 
+int (*sceKernelLwfsAllocateBlock)(int fd, off_t size);
+int (*sceKernelLwfsSetAttribute)(int fd, int flags);
+int (*sceKernelLwfsTrimBlock)(int fd, off_t size);
+off_t (*sceKernelLwfsLseek)(int fd, off_t offset, int whence);
+ssize_t (*sceKernelLwfsWrite)(int fd, const void *buf, size_t nbytes);
+
 unsigned int (*sceKernelSleep)(unsigned int seconds);
 int (*sceKernelUsleep)(unsigned int microseconds);
 int (*usleep)(unsigned int microseconds);
@@ -99,6 +105,12 @@ void initKernel(void) {
   RESOLVE(libKernelHandle, sceKernelRead);
   RESOLVE(libKernelHandle, sceKernelLseek);
   RESOLVE(libKernelHandle, sceKernelClose);
+  
+  RESOLVE(libKernelHandle, sceKernelLwfsAllocateBlock);
+  RESOLVE(libKernelHandle, sceKernelLwfsSetAttribute);
+  RESOLVE(libKernelHandle, sceKernelLwfsTrimBlock);
+  RESOLVE(libKernelHandle, sceKernelLwfsLseek);
+  RESOLVE(libKernelHandle, sceKernelLwfsWrite);
 
   RESOLVE(libKernelHandle, sceKernelSleep);
   RESOLVE(libKernelHandle, sceKernelUsleep);
