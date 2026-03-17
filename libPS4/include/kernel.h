@@ -53,6 +53,12 @@ extern int (*sceKernelRead)(int fd, void *buf, size_t nbyte);
 extern int (*sceKernelLseek)(int fd, off_t offset, int whence);
 extern int (*sceKernelClose)(int fd);
 
+extern int (*sceKernelLwfsAllocateBlock)(int fd, off_t size);
+extern int (*sceKernelLwfsSetAttribute)(int fd, int flags);
+extern int (*sceKernelLwfsTrimBlock)(int fd, off_t size);
+extern off_t (*sceKernelLwfsLseek)(int fd, off_t offset, int whence);
+extern ssize_t (*sceKernelLwfsWrite)(int fd, const void *buf, size_t nbytes);
+
 extern unsigned int (*sceKernelSleep)(unsigned int seconds);
 extern int (*sceKernelUsleep)(unsigned int microseconds);
 extern int (*usleep)(unsigned int microseconds);
