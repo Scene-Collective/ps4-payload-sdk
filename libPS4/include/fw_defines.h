@@ -77,6 +77,7 @@
 #define K1304_XFAST_SYSCALL        0x000001C0
 #define K1350_XFAST_SYSCALL        0x000001C0
 #define K1352_XFAST_SYSCALL        0x000001C0
+#define K1400_XFAST_SYSCALL        0x000001C0
 
 // Used in every payload that uses jailbreak();
 #define K300_PRISON_0              0x0
@@ -150,6 +151,7 @@
 #define K1304_PRISON_0             0x0111FA18
 #define K1350_PRISON_0             0x0111FA18
 #define K1352_PRISON_0             0x0111FA18
+#define K1400_PRISON_0             0x0111FA18
 
 // Used in every payload that uses jailbreak();
 #define K300_ROOTVNODE             0x0
@@ -223,6 +225,7 @@
 #define K1304_ROOTVNODE            0x02136E90
 #define K1350_ROOTVNODE            0x02136E90
 #define K1352_ROOTVNODE            0x02136E90
+#define K1400_ROOTVNODE            0x02136E90
 
 // Used in Kernel Dumper
 #define K300_COPYOUT               0x0
@@ -296,6 +299,7 @@
 #define K1304_COPYOUT              0x002BD5F0
 #define K1350_COPYOUT              0x002BD600
 #define K1352_COPYOUT              0x002BD6A0
+#define K1400_COPYOUT              0x002BD950
 
 // Used in Dumper, FTP, and Module Dumper
 #define K300_MMAP_SELF_1           0x0
@@ -369,6 +373,7 @@
 #define K1304_MMAP_SELF_1          0x003B2DB0
 #define K1350_MMAP_SELF_1          0x003B31F0
 #define K1352_MMAP_SELF_1          0x003B35F0
+#define K1400_MMAP_SELF_1          0x003B38A0
 
 // Used in Dumper, FTP, and Module Dumper
 #define K300_MMAP_SELF_2           0x0
@@ -442,6 +447,7 @@
 #define K1304_MMAP_SELF_2          0x003B2DD0
 #define K1350_MMAP_SELF_2          0x003B3210
 #define K1352_MMAP_SELF_2          0x003B3610
+#define K1400_MMAP_SELF_2          0x003B38C0
 
 // Used in Module Dumper, App Dumper, and FTP
 #define K300_MMAP_SELF_3           0x0
@@ -515,6 +521,7 @@
 #define K1304_MMAP_SELF_3          0x001FC4B1
 #define K1350_MMAP_SELF_3          0x001FC4C1
 #define K1352_MMAP_SELF_3          0x001FC561
+#define K1400_MMAP_SELF_3          0x001FC801
 
 // Used in Disable ASLR
 // May also require changes to the `kpayload_aslr` function in `payload_utils.c`
@@ -589,6 +596,7 @@
 #define K1304_DISABLE_ASLR         0x00477CC4
 #define K1350_DISABLE_ASLR         0x00478104
 #define K1352_DISABLE_ASLR         0x00478504
+#define K1400_DISABLE_ASLR         0x004787B4
 
 // Used in Enable Browser
 #define K300_REG_MGR_SET_INT       0x0
@@ -662,6 +670,7 @@
 #define K1304_REG_MGR_SET_INT      0x004E8480
 #define K1350_REG_MGR_SET_INT      0x004E88C0
 #define K1352_REG_MGR_SET_INT      0x004E8CC0
+#define K1400_REG_MGR_SET_INT      0x004E8F70
 
 // Used in Kernel Clock
 #define K300_SET_TIME              0x0
@@ -735,6 +744,7 @@
 #define K1304_SET_TIME             0x006349E0 // Needs Verified
 #define K1350_SET_TIME             0x00634E20 // Needs Verified
 #define K1352_SET_TIME             0x00635220 // Needs Verified
+#define K1400_SET_TIME             0x006354E0 // Needs Verified
 
 // Used in Kernel Clock
 #define K300_CLEAR_TIME_DIFFERENCE  0x00000000 // Needs Verified
@@ -808,6 +818,7 @@
 #define K1304_CLEAR_TIME_DIFFERENCE 0x00633EC0
 #define K1350_CLEAR_TIME_DIFFERENCE 0x00634300
 #define K1352_CLEAR_TIME_DIFFERENCE 0x00634700
+#define K1400_CLEAR_TIME_DIFFERENCE 0x006349C0
 
 // Used in ToDex
 #define K300_TARGET_ID             0x0
@@ -881,6 +892,7 @@
 #define K1304_TARGET_ID            0x021CC60D
 #define K1350_TARGET_ID            0x021CC60D
 #define K1352_TARGET_ID            0x021CC60D
+#define K1400_TARGET_ID            0x021CC60D
 
 // Used in Perm UART
 #define K300_ICC_NVS_WRITE         0x0
@@ -954,6 +966,7 @@
 #define K1304_ICC_NVS_WRITE        0x000A5A10
 #define K1350_ICC_NVS_WRITE        0x000A5A10
 #define K1352_ICC_NVS_WRITE        0x000A5A10
+#define K1400_ICC_NVS_WRITE        0x000A5A10
 
 #define K300_NPDRM_OPEN            0x0
 #define K310_NPDRM_OPEN            0x0
@@ -1026,6 +1039,7 @@
 #define K1304_NPDRM_OPEN           0x0064D6C0
 #define K1350_NPDRM_OPEN           0x0064DB00
 #define K1352_NPDRM_OPEN           0x0064DF00
+#define K1400_NPDRM_OPEN           0x0064E1C0
 
 #define K300_NPDRM_CLOSE           0x0
 #define K310_NPDRM_CLOSE           0x0
@@ -1098,6 +1112,7 @@
 #define K1304_NPDRM_CLOSE          0x0064D6E0
 #define K1350_NPDRM_CLOSE          0x0064DB20
 #define K1352_NPDRM_CLOSE          0x0064DF20
+#define K1400_NPDRM_CLOSE          0x0064E1E0
 
 #define K300_NPDRM_IOCTL           0x0
 #define K310_NPDRM_IOCTL           0x0
@@ -1170,6 +1185,7 @@
 #define K1304_NPDRM_IOCTL          0x0064D737
 #define K1350_NPDRM_IOCTL          0x0064DB77
 #define K1352_NPDRM_IOCTL          0x0064DF77
+#define K1400_NPDRM_IOCTL          0x0064E237
 
 #define K300_NO_BD_PATCH  0x0
 #define K310_NO_BD_PATCH  0x0
@@ -1242,6 +1258,7 @@
 #define K1304_NO_BD_PATCH 0x001D5DF3
 #define K1350_NO_BD_PATCH 0x001D5E03
 #define K1352_NO_BD_PATCH 0x001D5EA3
+#define K1400_NO_BD_PATCH 0x001D6143
 
 // clang-format on
 
