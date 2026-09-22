@@ -29,6 +29,31 @@ jobs:
           build_command: sh build.sh
 ```
 
+## Local Development with Docker
+
+The SDK is containerized with Docker, providing an x86_64 GNU toolchain suitable for both Linux and macOS (Apple Silicon / Intel) without needing to configure a local cross-compiler or modify system directories.
+
+### 1. Build the SDK Docker Image
+
+From the `ps4-payload-sdk` directory:
+
+```bash
+docker build --platform linux/amd64 -t ps4sdk .
+```
+
+### 2. Build a Payload
+
+Navigate to any payload directory (e.g. `ps4-disable-updates`) and mount your source tree:
+
+```bash
+docker run --rm --platform linux/amd64 \
+  -v "$PWD":/$(basename "$PWD") \
+  -w /$(basename "$PWD") \
+  ps4sdk make
+```
+
+> **Note for macOS Apple Silicon (M1/M2/M3/M4):** The `--platform linux/amd64` flag ensures the container runs using Rosetta 2 emulation, allowing the x86_64 GCC toolchain to emit code for the PS4's AMD Jaguar architecture (`-march=btver2`).
+
 ## Chain of Development
 [CTurt](https://github.com/CTurt/PS4-SDK) > [IDC](https://github.com/idc/ps4-payload-sdk) > [xvortex](https://github.com/xvortex/ps4-payload-sdk) > [stooged](https://github.com/stooged/ps4-payload-sdk) > [Scene-Collective](https://github.com/Scene-Collective/ps4-payload-sdk)
 
