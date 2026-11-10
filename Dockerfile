@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM --platform=linux/amd64 ubuntu:22.04
 
 # Set environment variable to disable interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive

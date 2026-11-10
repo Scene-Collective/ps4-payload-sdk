@@ -186,6 +186,11 @@ static inline __attribute__((always_inline)) void writeCr0(uint64_t cr0) {
   kernel_ptr = (uint8_t *)kernel_base;                                      \
   no_bd_patch = &kernel_ptr[K##x##_NO_BD_PATCH];
 
+#define ptrace_macro(x)                                                      \
+  kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-K##x##_XFAST_SYSCALL]; \
+  kernel_ptr = (uint8_t *)kernel_base;                                      \
+  ptrace_patch = &kernel_ptr[K##x##_PTRACE_CHECK];
+
 #define caseentry(id, macro) \
   case id:                   \
     macro(id);               \
@@ -284,5 +289,6 @@ int enable_perm_uart();
 int exit_idu();
 int npdrm_patch();
 int no_bd_patch();
+int ptrace_patch();
 
 #endif
